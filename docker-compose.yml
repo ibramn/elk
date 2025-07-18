@@ -25,7 +25,7 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=changeme
+      - ELASTICSEARCH_PASSWORD=MG0nM0*BmGzOXxFAi59
     ports:
       - "0.0.0.0:5601:5601"   # expose on all interfaces
     depends_on:
