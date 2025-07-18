@@ -1,0 +1,41 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=changeme
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "0.0.0.0:9200:9200"   # expose on all interfaces
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - elasticnet
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=changeme
+    ports:
+      - "0.0.0.0:5601:5601"   # expose on all interfaces
+    depends_on:
+      - elasticsearch
+    networks:
+      - elasticnet
+
+volumes:
+  esdata:
+
+networks:
+  elasticnet:
+    external: true
