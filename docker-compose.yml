@@ -42,18 +42,9 @@ services:
   apm-server:
     image: docker.elastic.co/apm/apm-server:8.13.4
     container_name: apm-server
-    environment:
-      - output.elasticsearch.hosts=["http://elasticsearch:9200"]
-      - output.elasticsearch.username=elastic
-      - output.elasticsearch.password=MG0nM0*BmGzOXxFAi59
-      - apm-server.auth.secret_token=your_secret_token_here
-      - apm-server.auth.anonymous.enabled=true
-      - apm-server.auth.anonymous.allow_service=*
-      - apm-server.auth.anonymous.allow_agent=*
-      - apm-server.kibana.enabled=true
-      - apm-server.kibana.host=kibana:5601
-      - apm-server.kibana.username=kibana_system
-      - apm-server.kibana.password=MG0nM0*BmGzOXxFAi59
+    command: ["apm-server", "-e", "-c", "/usr/share/apm-server/apm-server.yml"]
+    volumes:
+      - ./apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
     ports:
       - "0.0.0.0:8200:8200"
     depends_on:

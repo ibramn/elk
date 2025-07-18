@@ -1,0 +1,21 @@
+apm-server:
+  host: "0.0.0.0:8200"
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  protocol: "http"
+  username: "elastic"
+  password: "MG0nM0*BmGzOXxFAi59"
+  ssl.verification_mode: "none"
+
+apm-server.auth.secret_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+apm-server.auth.anonymous.enabled: true
+apm-server.auth.anonymous.allow_service: "*"
+apm-server.auth.anonymous.allow_agent: "*"
+
+apm-server.kibana.enabled: true
+apm-server.kibana.host: "kibana:5601"
+apm-server.kibana.username: "kibana_system"
+apm-server.kibana.password: "MG0nM0*BmGzOXxFAi59"
+
+logging.level: info 
