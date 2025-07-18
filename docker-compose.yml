@@ -26,7 +26,7 @@ services:
     container_name: kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=MG0nM0*BmGzOXxFAi59
       - xpack.encryptedSavedObjects.encryptionKey=12345678901234567890123456789012
       - xpack.security.encryptionKey=abcdefghijabcdefghijabcdefghijab
