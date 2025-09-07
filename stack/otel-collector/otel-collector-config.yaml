@@ -3,14 +3,8 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
-        tls:
-          cert_file: /otel-collector/certs/CEPO240915890176.crt
-          key_file: /otel-collector/certs/Privatekey.key
       http:
         endpoint: 0.0.0.0:4318
-        tls:
-          cert_file: /otel-collector/certs/CEPO240915890176.crt
-          key_file: /otel-collector/certs/Privatekey.key
 
 processors:
   batch:
