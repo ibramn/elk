@@ -1,0 +1,81 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+        tls:
+          cert_file: /otel-collector/certs/CEPO240915890176.crt
+          key_file: /otel-collector/certs/Privatekey.key
+      http:
+        endpoint: 0.0.0.0:4318
+        tls:
+          cert_file: /otel-collector/certs/CEPO240915890176.crt
+          key_file: /otel-collector/certs/Privatekey.key
+
+processors:
+  batch:
+    timeout: 100ms
+    send_batch_size: 1
+    send_batch_max_size: 10
+
+exporters:
+  elasticsearch:
+    endpoints: ["http://elasticsearch:9200"]
+    user: elastic
+    password: nkiATsBHHFsQvVeY3Zk6
+    traces_index: "otel-v1-traces"
+    logs_index: "otel-v1-logs"
+    # Enable index creation
+    mapping:
+      mode: "ecs"
+    # Retry configuration for failed requests
+    retry:
+      enabled: true
+      max_requests: 5
+      initial_interval: 100ms
+      max_interval: 1m
+
+  debug:
+    verbosity: detailed
+
+  # Use OTLP HTTP exporter for Elastic APM
+  otlphttp/elasticapm:
+    endpoint: "http://apm-server:8200"
+    tls:
+      insecure: true
+    headers:
+      # Replace with your real token or ApiKey
+      # For secret token:  Authorization: "Bearer <secret_token>"
+      # For API key:       Authorization: "ApiKey <base64_api_key>"
+      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    # Add retry configuration for APM
+    retry_on_failure:
+      enabled: true
+      initial_interval: 100ms
+      max_interval: 1s
+      max_elapsed_time: 10s
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  telemetry:
+    logs:
+      level: debug
+    metrics:
+      level: detailed
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, elasticsearch, otlphttp/elasticapm]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [elasticsearch]

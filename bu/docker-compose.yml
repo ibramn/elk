@@ -25,17 +25,13 @@ services:
     image: docker.elastic.co/kibana/kibana:8.13.4
     container_name: kibana
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://192.168.7.183:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=nkiATsBHHFsQvVeY3Zk6
       - xpack.encryptedSavedObjects.encryptionKey=12345678901234567890123456789012
       - xpack.security.encryptionKey=abcdefghijabcdefghijabcdefghijab
       - xpack.reporting.encryptionKey=zxcvbnmlkjhgfdsaqwertyuiopasdfgh
       - xpack.security.session.secureCookies=false
-      - SERVER_HOST=0.0.0.0
-      - SERVER_PUBLICBASEURL=http://kibana:5601
-      - SERVER_SSL_ENABLED=false
-      - SERVER_SSL_REDIRECT=false
     ports:
       - "0.0.0.0:5601:5601"
     depends_on:
@@ -56,23 +52,6 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-    networks:
-      - elasticnet
-
-  otel-collector:
-    build:
-      context: ./otel-collector
-    container_name: otel-collector
-    volumes:
-      - ./otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
-      - ./otel-collector/certs:/otel-collector/certs:ro
-    ports:
-      - "0.0.0.0:4317:4317"
-      - "0.0.0.0:4318:4318"
-      - "0.0.0.0:13133:13133"
-    depends_on:
-      - elasticsearch
-      - apm-server
     networks:
       - elasticnet
 
