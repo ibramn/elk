@@ -30,6 +30,18 @@ exporters:
   debug:
     verbosity: detailed
 
+  # Use OTLP HTTP exporter for Elastic APM
+  otlphttp/elasticapm:
+    endpoint: "http://apm-server:8200"
+    tls:
+      insecure: true
+    headers:
+      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    retry_on_failure:
+      enabled: true
+      initial_interval: 100ms
+      max_interval: 1s
+      max_elapsed_time: 10s
 
 extensions:
   health_check:
@@ -46,7 +58,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug, elasticsearch]
+      exporters: [debug, elasticsearch, otlphttp/elasticapm]
     metrics:
       receivers: [otlp]
       processors: [batch]

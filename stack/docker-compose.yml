@@ -43,6 +43,22 @@ services:
     networks:
       - elasticnet
 
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:8.13.4
+    container_name: apm-server
+    command: ["apm-server", "-e", "-c", "/usr/share/apm-server/apm-server.yml"]
+    volumes:
+      - ./apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+    ports:
+      - "0.0.0.0:8200:8200"
+    environment:
+      APM_SECRET_TOKEN: "mtW2H+aGDuzS6qPF4hBvd85bjyBNqXymrinHDS/FguI="
+    depends_on:
+      - elasticsearch
+      - kibana
+    networks:
+      - elasticnet
+
   otel-collector:
     build:
       context: ./otel-collector
